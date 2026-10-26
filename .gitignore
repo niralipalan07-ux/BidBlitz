@@ -1,0 +1,16 @@
+# Secret API keys
+.env
+.env.*
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+
+# Generated output files
+tender_data.json
+vendor_data.json
+ai_tender_requirements.json
