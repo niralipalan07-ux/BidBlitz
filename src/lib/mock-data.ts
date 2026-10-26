@@ -1,0 +1,196 @@
+// DEMO DATA — sample records for previewing the interface. Not real tenders or vendors.
+import type { Analysis, Submission, Tender } from "./types";
+
+export const DEMO_VENDOR_ID = "vendor-demo";
+
+export const mockTenders: Tender[] = [
+  {
+    id: "t1",
+    title: "Supply of Desktop Computers for District Offices",
+    reference: "DEMO/IT/2026/014",
+    department: "Sample Department of Information Technology",
+    deadline: "2026-11-28T17:00:00Z",
+    description:
+      "Procurement of 250 desktop computers with three-year on-site warranty for district administrative offices.",
+    eligibility: [
+      "Registered under GST with valid GSTIN",
+      "Minimum average annual turnover of ₹2 crore over the last three years",
+      "At least two similar supply orders in the past five years",
+    ],
+    requiredDocuments: ["GST Certificate", "PAN Document", "OEM Authorization", "Experience Certificates"],
+    technical: [
+      "Intel Core i5 (13th gen) or equivalent processor",
+      "16 GB DDR5 RAM, 512 GB NVMe SSD",
+      "Three-year comprehensive on-site warranty",
+    ],
+  },
+  {
+    id: "t2",
+    title: "Solar Rooftop Installation for Public Schools",
+    reference: "DEMO/ENR/2026/007",
+    department: "Sample Renewable Energy Agency",
+    deadline: "2026-12-12T17:00:00Z",
+    description: "Design, supply and installation of 40 rooftop solar systems (10 kWp each) with five-year maintenance.",
+    eligibility: [
+      "Udyam (MSME) registration or equivalent",
+      "Experience installing at least 200 kWp cumulative capacity",
+    ],
+    requiredDocuments: ["GST Certificate", "Udyam Registration", "Technical Specifications", "Experience Certificates"],
+    technical: ["Mono PERC modules ≥ 540 Wp", "Grid-tied inverter with IEC 62109 compliance", "Remote monitoring"],
+  },
+  {
+    id: "t3",
+    title: "Annual Maintenance of Office Furniture",
+    reference: "DEMO/ADM/2026/031",
+    department: "Sample General Administration Office",
+    deadline: "2026-11-15T17:00:00Z",
+    description: "Annual repair and maintenance contract for office furniture across four campus buildings.",
+    eligibility: ["Valid GST registration", "Local service presence within 50 km"],
+    requiredDocuments: ["GST Certificate", "PAN Document", "Other Supporting Documents"],
+    technical: ["Response time under 48 hours", "Quarterly preventive maintenance visits"],
+  },
+];
+
+export const mockAnalyses: Analysis[] = [
+  {
+    id: "a1",
+    tenderId: "t1",
+    submissionId: "s1",
+    vendorName: "Greenfield Systems (Demo)",
+    createdAt: "2026-10-20T10:30:00Z",
+    status: "Review Required",
+    findings: [
+      {
+        requirement: "GST Certificate",
+        original: "Bidder must be registered under GST with valid GSTIN.",
+        status: "MATCHED",
+        evidence: "Supporting text found",
+        extracted: "Form GST REG-06 — Registration Certificate … Legal Name: Greenfield Systems",
+        sourceDocument: "GST.pdf",
+        page: 1,
+        explanation: "Relevant GST information appears in the submitted document.",
+        action: "No action needed. Authenticity is not verified by this tool.",
+      },
+      {
+        requirement: "OEM Authorization",
+        original: "Bidder must submit OEM authorization letter for the offered model.",
+        status: "MISSING_EVIDENCE",
+        evidence: "No supporting evidence located",
+        explanation: "No matching authorization evidence was identified in the uploaded files.",
+        action: "Request the OEM authorization letter from the vendor or confirm it was submitted elsewhere.",
+      },
+      {
+        requirement: "Technical Specifications",
+        original: "Processor: Intel Core i5 (13th gen) or equivalent; 16 GB DDR5; 512 GB NVMe SSD.",
+        status: "REVIEW_REQUIRED",
+        evidence: "Partial information located",
+        extracted: "Processor: Core i5-13400 · Memory: 16 GB · Storage: 512 GB SSD",
+        sourceDocument: "Technical.pdf",
+        page: 4,
+        explanation:
+          "The document contains related specifications, but manual verification is needed to determine whether all tender conditions are met.",
+        action: "Verify memory type (DDR5) and SSD interface (NVMe) with the vendor datasheet.",
+      },
+      {
+        requirement: "Experience Certificates",
+        original: "At least two similar supply orders in the past five years.",
+        status: "MATCHED",
+        evidence: "Two purchase orders referenced",
+        extracted: "Purchase Order No. 4471 (2023) … Purchase Order No. 5120 (2024)",
+        sourceDocument: "Experience.pdf",
+        page: 2,
+        explanation: "Two orders for desktop supply appear within the stated period.",
+        action: "Confirm order values meet tender thresholds.",
+      },
+      {
+        requirement: "Annual Turnover",
+        original: "Minimum average annual turnover of ₹2 crore over the last three years.",
+        status: "NOT_ASSESSED",
+        evidence: "No financial statements submitted",
+        explanation: "No document category covering financial statements was provided, so this was not assessed.",
+        action: "Request audited financial statements or CA certificate.",
+      },
+    ],
+  },
+  {
+    id: "a2",
+    tenderId: "t2",
+    submissionId: "s2",
+    vendorName: "SunPath Energy (Demo)",
+    createdAt: "2026-10-18T14:10:00Z",
+    status: "Analysis Completed",
+    findings: [
+      {
+        requirement: "GST Certificate",
+        original: "Valid GST registration certificate.",
+        status: "MATCHED",
+        evidence: "Supporting text found",
+        sourceDocument: "GST_SunPath.pdf",
+        page: 1,
+        explanation: "GSTIN and legal name appear in the document.",
+        action: "No action needed.",
+      },
+      {
+        requirement: "Udyam Registration",
+        original: "Udyam (MSME) registration certificate.",
+        status: "MATCHED",
+        evidence: "Udyam number located",
+        sourceDocument: "Udyam.pdf",
+        page: 1,
+        explanation: "Udyam registration details appear in the submitted document.",
+        action: "No action needed.",
+      },
+      {
+        requirement: "Installed Capacity Experience",
+        original: "Experience installing at least 200 kWp cumulative capacity.",
+        status: "MATCHED",
+        evidence: "Completion certificates totalling 240 kWp",
+        sourceDocument: "Experience.pdf",
+        page: 3,
+        explanation: "Completion certificates reference cumulative capacity above the stated threshold.",
+        action: "Spot-check one certificate with the issuing client.",
+      },
+    ],
+  },
+];
+
+export const mockSubmissions: Submission[] = [
+  {
+    id: "s1",
+    tenderId: "t1",
+    vendorId: DEMO_VENDOR_ID,
+    vendorName: "Greenfield Systems (Demo)",
+    submittedAt: "2026-10-19T09:00:00Z",
+    status: "Review Required",
+    lastAnalysisAt: "2026-10-20T10:30:00Z",
+    analysisId: "a1",
+    files: [
+      { name: "GST.pdf", size: 210_000, category: "GST Certificate" },
+      { name: "Technical.pdf", size: 1_400_000, category: "Technical Specifications" },
+      { name: "Experience.pdf", size: 640_000, category: "Experience Certificates" },
+    ],
+  },
+  {
+    id: "s2",
+    tenderId: "t2",
+    vendorId: "vendor-other",
+    vendorName: "SunPath Energy (Demo)",
+    submittedAt: "2026-10-17T11:20:00Z",
+    status: "Analysis Completed",
+    lastAnalysisAt: "2026-10-18T14:10:00Z",
+    analysisId: "a2",
+    files: [
+      { name: "GST_SunPath.pdf", size: 190_000, category: "GST Certificate" },
+      { name: "Udyam.pdf", size: 150_000, category: "Udyam Registration" },
+    ],
+  },
+  {
+    id: "s3",
+    tenderId: "t3",
+    vendorId: "vendor-third",
+    vendorName: "Oakline Interiors (Demo)",
+    submittedAt: "2026-10-22T08:45:00Z",
+    status: "Submitted",
+    files: [{ name: "GST_Oakline.pdf", size: 180_000, category: "GST Certificate" }],
+  },
+];
