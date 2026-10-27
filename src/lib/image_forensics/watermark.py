@@ -1,0 +1,113 @@
+import cv2
+import numpy as np
+
+from image_forensics.quality import load_images, analyze_blur
+
+MIN_INLIERS = 10      # fewer geometric matches than this = watermark not found
+RATIO = 0.75          # Lowe's ratio test: lower = stricter matching
+MAX_SIDE = 1600       # resize large pages so matching stays fast
+TEXT_LEVEL = 140      # pixels darker than this are treated as text, not watermark
+SCALE_RANGE = (0.3, 3.0)  # watermark size on page vs reference must be plausible
+
+
+
+def _prepare(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
+    h, w = gray.shape
+
+    scale = min(1.0, MAX_SIDE / max(h, w))
+    if scale < 1.0:
+        gray = cv2.resize(
+            gray, None, fx=scale, fy=scale,
+            interpolation=cv2.INTER_AREA
+        )
+
+    # Preserve dark stamp details instead of whitening the entire seal.
+    # Enhance contrast so faint watermark patterns remain detectable.
+    layer = cv2.createCLAHE(
+        clipLimit=2.0, tileGridSize=(8, 8)
+    ).apply(gray)
+
+    return layer, scale
+
+
+
+def match_watermark(page_img, reference_img):
+    """Look for the reference watermark on the page using SIFT features + RANSAC."""
+    page, p_scale = _prepare(page_img)
+    ref, _ = _prepare(reference_img)
+
+    sift = cv2.SIFT_create()
+    kp_ref, des_ref = sift.detectAndCompute(ref, None)
+    kp_page, des_page = sift.detectAndCompute(page, None)
+    if des_ref is None or des_page is None or len(kp_ref) < 8:
+        return {"inliers": 0, "region": None}
+
+    matcher = cv2.BFMatcher(cv2.NORM_L2)
+    pairs = matcher.knnMatch(des_ref, des_page, k=2)
+    good = [m for m, n in (p for p in pairs if len(p) == 2) if m.distance < RATIO * n.distance]
+    if len(good) < 4:
+        return {"inliers": 0, "region": None}
+
+    src = np.float32([kp_ref[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+    dst = np.float32([kp_page[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+    # Similarity transform = rotation + uniform scale + shift (what a stamped watermark can undergo)
+    M, mask = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=4.0)
+    if M is None:
+        return {"inliers": 0, "region": None}
+
+    scale_factor = float(np.hypot(M[0, 0], M[1, 0]))
+    if not (SCALE_RANGE[0] <= scale_factor <= SCALE_RANGE[1]):
+        return {"inliers": 0, "region": None}
+
+    inliers = int(mask.sum())
+    h, w = ref.shape
+    corners = np.float32([[0, 0], [w, 0], [w, h], [0, h]]).reshape(-1, 1, 2)
+    box = cv2.transform(corners, M).reshape(-1, 2) / p_scale
+    x0, y0 = box.min(axis=0)
+    x1, y1 = box.max(axis=0)
+    region = {"x": int(x0), "y": int(y0), "w": int(x1 - x0), "h": int(y1 - y0)}
+    return {"inliers": inliers, "region": region}
+
+
+def analyze_watermark(page_img, reference_img=None):
+    """Compare one page against a reference watermark. Never returns a 'fraud' verdict."""
+    if reference_img is None:
+        return {"status": "not_checked", "inliers": None, "region": None,
+                "explanation": "No reference watermark supplied, so nothing to compare against."}
+
+    # Quality gate: do not judge a watermark on a badly blurred page
+    if analyze_blur(page_img)["status"] == "low_quality":
+        return {"status": "low_quality", "inliers": None, "region": None,
+                "explanation": "Scan is too blurry to judge the watermark reliably."}
+
+    r = match_watermark(page_img, reference_img)
+    if r["inliers"] >= MIN_INLIERS:
+        return {"status": "ok", "inliers": r["inliers"], "region": r["region"],
+                "explanation": f"Reference watermark found ({r['inliers']} matching features)."}
+    return {"status": "review", "inliers": r["inliers"], "region": None,
+            "explanation": f"Reference watermark not found ({r['inliers']} matching features). "
+                           "It may be missing, altered, or washed out by the scan. Needs human review."}
+
+
+def run_watermark_check(file_input, reference_path, vendor_name="Vendor"):
+    """Run on every page of a PDF/image. Returns result dicts in the TenderLens schema."""
+    reference = cv2.imread(reference_path) if reference_path else None
+    if reference_path and reference is None:
+        raise ValueError(f"Could not read reference watermark: {reference_path}")
+
+    label = {"ok": "MATCHED", "review": "REVIEW", "low_quality": "REVIEW", "not_checked": "REVIEW"}
+    filename = getattr(file_input, "name", str(file_input))
+    results = []
+    for page_no, img in load_images(file_input):
+        r = analyze_watermark(img, reference)
+        results.append({
+            "vendor": vendor_name,
+            "requirement": "Watermark consistency",
+            "status": label[r["status"]],
+            "evidence": r["explanation"],
+            "reason": "Automated visual comparison against a supplied reference. Not proof of authenticity.",
+            "page": f"{filename}, page {page_no}",
+            "region": r["region"],
+        })
+    return results

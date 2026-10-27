@@ -70,3 +70,50 @@ export const DOCUMENT_CATEGORIES = [
   "Experience Certificates",
   "Other Supporting Documents",
 ] as const;
+
+export type DocumentCategory = (typeof DOCUMENT_CATEGORIES)[number];
+
+export interface VendorProfile {
+  companyName: string;
+  legalName: string;
+  cin: string;
+  gstin: string;
+  pan: string;
+  udyam: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  website?: string;
+  turnoverLast3Years?: string;
+}
+
+export interface VendorDocument {
+  id: string;
+  name: string;
+  category: string;
+  size: number;
+  uploadedAt: string;
+  validUntil?: string;
+  status: "Active" | "Pending Review" | "Expired";
+}
+
+export interface ReportItem {
+  id: string;
+  analysisId: string;
+  tenderId: string;
+  tenderTitle: string;
+  tenderReference: string;
+  department: string;
+  vendorName: string;
+  createdAt: string;
+  status: SubmissionStatus;
+  matchedCount: number;
+  missingCount: number;
+  reviewCount: number;
+  totalRequirements: number;
+}
+

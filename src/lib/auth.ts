@@ -65,7 +65,13 @@ export function signOut() {
   window.dispatchEvent(new Event("tl-auth"));
 }
 
-export async function register(input: { name: string; email: string; password: string; company: string }) {
+export async function register(input: {
+  name: string;
+  email: string;
+  password: string;
+  company: string;
+  phone?: string;
+}) {
   const users = readUsers();
   const email = input.email.trim().toLowerCase();
   if (users.some((u) => u.email === email) || Object.values(DEMO_ACCOUNTS).some((a) => a.email === email)) {

@@ -24,7 +24,7 @@ export const Route = createFileRoute("/register")({
 
 function Register() {
   const navigate = useNavigate();
-  const [f, setF] = useState({ name: "", email: "", password: "", confirm: "", company: "" });
+  const [f, setF] = useState({ name: "", email: "", phone: "", password: "", confirm: "", company: "" });
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -35,6 +35,7 @@ function Register() {
     const er: Record<string, string> = {};
     if (f.name.trim().length < 2) er.name = "Enter your full name.";
     if (!/^\S+@\S+\.\S+$/.test(f.email)) er.email = "Enter a valid business email.";
+    if (f.phone.trim().length < 8) er.phone = "Enter a valid contact phone number.";
     if (f.password.length < 8) er.password = "Use at least 8 characters.";
     if (f.confirm !== f.password) er.confirm = "Passwords do not match.";
     if (f.company.trim().length < 2) er.company = "Enter your company name.";
@@ -53,10 +54,10 @@ function Register() {
     }
   };
 
-  const field = (k: "name" | "email" | "company", label: string, type = "text") => (
+  const field = (k: "name" | "email" | "company" | "phone", label: string, type = "text", placeholder = "") => (
     <div className="space-y-1.5">
       <Label htmlFor={k}>{label}</Label>
-      <Input id={k} type={type} value={f[k]} onChange={set(k)} aria-invalid={!!errors[k]} />
+      <Input id={k} type={type} placeholder={placeholder} value={f[k]} onChange={set(k)} aria-invalid={!!errors[k]} />
       {errors[k] && <p className="text-xs text-danger">{errors[k]}</p>}
     </div>
   );
@@ -71,6 +72,7 @@ function Register() {
         {field("name", "Full name")}
         {field("email", "Business email", "email")}
         {field("company", "Company name")}
+        {field("phone", "Business phone number", "tel", "+91 98200 12345")}
         <div className="space-y-1.5">
           <Label htmlFor="password">Password</Label>
           <PasswordInput id="password" value={f.password} onChange={set("password")} autoComplete="new-password" />

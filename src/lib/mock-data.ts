@@ -1,5 +1,5 @@
 // DEMO DATA — sample records for previewing the interface. Not real tenders or vendors.
-import type { Analysis, Submission, Tender } from "./types";
+import type { Analysis, Submission, Tender, VendorDocument, VendorProfile } from "./types";
 
 export const DEMO_VENDOR_ID = "vendor-demo";
 
@@ -11,7 +11,7 @@ export const mockTenders: Tender[] = [
     department: "Sample Department of Information Technology",
     deadline: "2026-11-28T17:00:00Z",
     description:
-      "Procurement of 250 desktop computers with three-year on-site warranty for district administrative offices.",
+      "Procurement of 250 enterprise desktop computers with three-year comprehensive on-site warranty for district administrative offices.",
     eligibility: [
       "Registered under GST with valid GSTIN",
       "Minimum average annual turnover of ₹2 crore over the last three years",
@@ -30,7 +30,7 @@ export const mockTenders: Tender[] = [
     reference: "DEMO/ENR/2026/007",
     department: "Sample Renewable Energy Agency",
     deadline: "2026-12-12T17:00:00Z",
-    description: "Design, supply and installation of 40 rooftop solar systems (10 kWp each) with five-year maintenance.",
+    description: "Design, supply, and installation of 40 rooftop solar systems (10 kWp each) with five-year remote monitoring and maintenance.",
     eligibility: [
       "Udyam (MSME) registration or equivalent",
       "Experience installing at least 200 kWp cumulative capacity",
@@ -40,14 +40,52 @@ export const mockTenders: Tender[] = [
   },
   {
     id: "t3",
-    title: "Annual Maintenance of Office Furniture",
+    title: "Annual Maintenance of Office Furniture & Infrastructure",
     reference: "DEMO/ADM/2026/031",
     department: "Sample General Administration Office",
     deadline: "2026-11-15T17:00:00Z",
-    description: "Annual repair and maintenance contract for office furniture across four campus buildings.",
-    eligibility: ["Valid GST registration", "Local service presence within 50 km"],
+    description: "Annual repair and preventive maintenance contract for ergonomic office furniture across four district administrative complexes.",
+    eligibility: ["Valid GST registration", "Local service presence within 50 km radius"],
     requiredDocuments: ["GST Certificate", "PAN Document", "Other Supporting Documents"],
-    technical: ["Response time under 48 hours", "Quarterly preventive maintenance visits"],
+    technical: ["Emergency response time under 48 hours", "Quarterly scheduled preventive maintenance visits"],
+  },
+  {
+    id: "t4",
+    title: "Cloud Infrastructure & Secure Data Migration Services",
+    reference: "DEMO/NIC/2026/058",
+    department: "Sample State Informatics Centre",
+    deadline: "2026-12-20T18:00:00Z",
+    description: "Engagement of certified cloud solution provider for migration of legacy public grievance databases to sovereign cloud infrastructure.",
+    eligibility: [
+      "ISO 27001 and ISO 9001 certified organization",
+      "Minimum 5 years of experience in enterprise government data migrations",
+      "Empanelled with standard government cloud registries",
+    ],
+    requiredDocuments: ["GST Certificate", "Technical Specifications", "Experience Certificates", "Other Supporting Documents"],
+    technical: [
+      "Zero data loss SLA with 99.95% uptime guarantees",
+      "AES-256 at-rest and TLS 1.3 in-transit encryption",
+      "Tier-3 sovereign data center hosting requirement",
+    ],
+  },
+  {
+    id: "t5",
+    title: "Procurement of Medical Diagnostic Ultrasound Systems",
+    reference: "DEMO/HLT/2026/102",
+    department: "Sample Directorate of Health Services",
+    deadline: "2026-11-22T15:00:00Z",
+    description: "Supply, installation, testing and commissioning of 15 high-resolution color Doppler ultrasound machines for civil district hospitals.",
+    eligibility: [
+      "Original Equipment Manufacturer (OEM) or Authorized Direct Agent",
+      "CE or US-FDA cleared medical imaging equipment",
+      "Five years comprehensive warranty with annual maintenance contract",
+    ],
+    requiredDocuments: ["GST Certificate", "PAN Document", "OEM Authorization", "Technical Specifications", "Experience Certificates"],
+    technical: [
+      "Broadband convex and linear vascular probes included",
+      "Integrated DICOM 3.0 network interface",
+      "Continuous battery backup for at least 60 minutes",
+    ],
   },
 ];
 
@@ -65,7 +103,7 @@ export const mockAnalyses: Analysis[] = [
         original: "Bidder must be registered under GST with valid GSTIN.",
         status: "MATCHED",
         evidence: "Supporting text found",
-        extracted: "Form GST REG-06 — Registration Certificate … Legal Name: Greenfield Systems",
+        extracted: "Form GST REG-06 — Registration Certificate … Legal Name: Greenfield Systems · GSTIN: 27AABCG1234D1Z5",
         sourceDocument: "GST.pdf",
         page: 1,
         explanation: "Relevant GST information appears in the submitted document.",
@@ -152,6 +190,54 @@ export const mockAnalyses: Analysis[] = [
       },
     ],
   },
+  {
+    id: "a3",
+    tenderId: "t5",
+    submissionId: "s4",
+    vendorName: "Apex Meditech (Demo)",
+    createdAt: "2026-10-24T16:45:00Z",
+    status: "Review Required",
+    findings: [
+      {
+        requirement: "GST Certificate",
+        original: "Valid GST registration certificate.",
+        status: "MATCHED",
+        evidence: "GSTIN verified in file",
+        sourceDocument: "GST_Apex.pdf",
+        page: 1,
+        explanation: "GST document matches bidder legal entity.",
+        action: "No further action needed.",
+      },
+      {
+        requirement: "OEM Authorization",
+        original: "Direct OEM authorization letter for imaging apparatus.",
+        status: "MATCHED",
+        evidence: "OEM Letter from Sonoline MedSys",
+        sourceDocument: "OEM_Auth.pdf",
+        page: 1,
+        explanation: "Valid authorization letter referencing the tender reference number.",
+        action: "Confirm validity date through tender evaluation duration.",
+      },
+      {
+        requirement: "Technical Specifications",
+        original: "Color Doppler ultrasound with multi-frequency convex probe.",
+        status: "REVIEW_REQUIRED",
+        evidence: "Model Sonoline 4000 Datasheet",
+        sourceDocument: "Specs.pdf",
+        page: 6,
+        explanation: "Transducer frequency ranges slightly differ from target tender spec 3.5MHz to 5.0MHz.",
+        action: "Consult technical evaluation committee for acoustic bandwidth clearance.",
+      },
+      {
+        requirement: "CE / US-FDA Clearance",
+        original: "CE marked or FDA cleared diagnostic device certificate.",
+        status: "MISSING_EVIDENCE",
+        evidence: "No regulatory clearance certificate attached",
+        explanation: "The uploaded package lacks CE Declaration of Conformity or FDA 510(k) approval letters.",
+        action: "Request regulatory certificate immediately from the vendor.",
+      },
+    ],
+  },
 ];
 
 export const mockSubmissions: Submission[] = [
@@ -182,6 +268,7 @@ export const mockSubmissions: Submission[] = [
     files: [
       { name: "GST_SunPath.pdf", size: 190_000, category: "GST Certificate" },
       { name: "Udyam.pdf", size: 150_000, category: "Udyam Registration" },
+      { name: "Experience.pdf", size: 820_000, category: "Experience Certificates" },
     ],
   },
   {
@@ -191,6 +278,97 @@ export const mockSubmissions: Submission[] = [
     vendorName: "Oakline Interiors (Demo)",
     submittedAt: "2026-10-22T08:45:00Z",
     status: "Submitted",
-    files: [{ name: "GST_Oakline.pdf", size: 180_000, category: "GST Certificate" }],
+    files: [
+      { name: "GST_Oakline.pdf", size: 180_000, category: "GST Certificate" },
+      { name: "PAN_Oakline.pdf", size: 120_000, category: "PAN Document" },
+    ],
+  },
+  {
+    id: "s4",
+    tenderId: "t5",
+    vendorId: "vendor-fourth",
+    vendorName: "Apex Meditech (Demo)",
+    submittedAt: "2026-10-23T14:00:00Z",
+    status: "Review Required",
+    lastAnalysisAt: "2026-10-24T16:45:00Z",
+    analysisId: "a3",
+    files: [
+      { name: "GST_Apex.pdf", size: 240_000, category: "GST Certificate" },
+      { name: "OEM_Auth.pdf", size: 450_000, category: "OEM Authorization" },
+      { name: "Specs.pdf", size: 2_100_000, category: "Technical Specifications" },
+    ],
   },
 ];
+
+export const mockVendorProfile: VendorProfile = {
+  companyName: "Greenfield Systems (Demo)",
+  legalName: "Greenfield Enterprise Solutions Pvt. Ltd.",
+  cin: "U72900MH2018PTC309112",
+  gstin: "27AABCG1234D1Z5",
+  pan: "AABCG1234D",
+  udyam: "UDYAM-MH-02-0049281",
+  contactPerson: "Asha Mehta",
+  email: "vendor@demo.tenderlens",
+  phone: "+91 98200 12345",
+  address: "Plot 42, Green Tech Park, MIDC Industrial Area",
+  city: "Mumbai",
+  state: "Maharashtra",
+  pincode: "400093",
+  website: "https://greenfield-systems.demo",
+  turnoverLast3Years: "₹ 4.82 Crores (Avg)",
+};
+
+export const mockVendorDocuments: VendorDocument[] = [
+  {
+    id: "doc-1",
+    name: "Greenfield_GST_REG06.pdf",
+    category: "GST Certificate",
+    size: 215_000,
+    uploadedAt: "2026-09-15T10:00:00Z",
+    validUntil: "2027-12-31",
+    status: "Active",
+  },
+  {
+    id: "doc-2",
+    name: "PAN_Card_Greenfield.pdf",
+    category: "PAN Document",
+    size: 112_000,
+    uploadedAt: "2026-09-15T10:05:00Z",
+    status: "Active",
+  },
+  {
+    id: "doc-3",
+    name: "Udyam_Registration_Certificate.pdf",
+    category: "Udyam Registration",
+    size: 184_000,
+    uploadedAt: "2026-09-15T10:12:00Z",
+    validUntil: "2028-03-31",
+    status: "Active",
+  },
+  {
+    id: "doc-4",
+    name: "OEM_Authorization_2026_HP_Lenovo.pdf",
+    category: "OEM Authorization",
+    size: 512_000,
+    uploadedAt: "2026-10-01T14:20:00Z",
+    validUntil: "2027-03-31",
+    status: "Active",
+  },
+  {
+    id: "doc-5",
+    name: "Desktop_Hardware_Technical_Datasheet.pdf",
+    category: "Technical Specifications",
+    size: 1_430_000,
+    uploadedAt: "2026-10-10T11:00:00Z",
+    status: "Active",
+  },
+  {
+    id: "doc-6",
+    name: "Client_Completion_Certificates_2023_2025.pdf",
+    category: "Experience Certificates",
+    size: 655_000,
+    uploadedAt: "2026-10-12T16:30:00Z",
+    status: "Active",
+  },
+];
+

@@ -14,8 +14,28 @@ import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as OfficialRouteImport } from './routes/official'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as VendorRouteImport } from './routes/vendor'
+import { Route as OfficialDashboardRouteImport } from './routes/official/dashboard'
+import { Route as OfficialHistoryRouteImport } from './routes/official/history'
+import { Route as OfficialNewAnalysisRouteImport } from './routes/official/new-analysis'
+import { Route as OfficialReportsRouteImport } from './routes/official/reports'
+import { Route as OfficialSettingsRouteImport } from './routes/official/settings'
+import { Route as OfficialSubmissionsRouteImport } from './routes/official/submissions'
+import { Route as OfficialTendersRouteImport } from './routes/official/tenders'
 import { Route as OfficialLoginRouteImport } from './routes/official_.login'
+import { Route as VendorDashboardRouteImport } from './routes/vendor/dashboard'
+import { Route as VendorDocumentsRouteImport } from './routes/vendor/documents'
+import { Route as VendorProfileRouteImport } from './routes/vendor/profile'
+import { Route as VendorReportsRouteImport } from './routes/vendor/reports'
+import { Route as VendorSettingsRouteImport } from './routes/vendor/settings'
+import { Route as VendorSubmissionsRouteImport } from './routes/vendor/submissions'
+import { Route as VendorTendersRouteImport } from './routes/vendor/tenders'
+import { Route as OfficialAnalysisIdRouteImport } from './routes/official/analysis_.$id'
+import { Route as VendorSubmissionsIdRouteImport } from './routes/vendor/submissions_.$id'
+import { Route as VendorSubmitIdRouteImport } from './routes/vendor/submit_.$id'
+import { Route as VendorTendersIdRouteImport } from './routes/vendor/tenders_.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -42,15 +62,115 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfficialRoute = OfficialRouteImport.update({
+  id: '/official',
+  path: '/official',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VendorRoute = VendorRouteImport.update({
+  id: '/vendor',
+  path: '/vendor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfficialDashboardRoute = OfficialDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const OfficialHistoryRoute = OfficialHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const OfficialNewAnalysisRoute = OfficialNewAnalysisRouteImport.update({
+  id: '/new-analysis',
+  path: '/new-analysis',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const OfficialReportsRoute = OfficialReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const OfficialSettingsRoute = OfficialSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const OfficialSubmissionsRoute = OfficialSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const OfficialTendersRoute = OfficialTendersRouteImport.update({
+  id: '/tenders',
+  path: '/tenders',
+  getParentRoute: () => OfficialRoute,
+} as any)
 const OfficialLoginRoute = OfficialLoginRouteImport.update({
   id: '/official_/login',
   path: '/official/login',
   getParentRoute: () => rootRouteImport,
+} as any)
+const VendorDashboardRoute = VendorDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorDocumentsRoute = VendorDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorProfileRoute = VendorProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorReportsRoute = VendorReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorSettingsRoute = VendorSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorSubmissionsRoute = VendorSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorTendersRoute = VendorTendersRouteImport.update({
+  id: '/tenders',
+  path: '/tenders',
+  getParentRoute: () => VendorRoute,
+} as any)
+const OfficialAnalysisIdRoute = OfficialAnalysisIdRouteImport.update({
+  id: '/analysis_/$id',
+  path: '/analysis/$id',
+  getParentRoute: () => OfficialRoute,
+} as any)
+const VendorSubmissionsIdRoute = VendorSubmissionsIdRouteImport.update({
+  id: '/submissions_/$id',
+  path: '/submissions/$id',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorSubmitIdRoute = VendorSubmitIdRouteImport.update({
+  id: '/submit_/$id',
+  path: '/submit/$id',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorTendersIdRoute = VendorTendersIdRouteImport.update({
+  id: '/tenders_/$id',
+  path: '/tenders/$id',
+  getParentRoute: () => VendorRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -59,8 +179,28 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/official': typeof OfficialRouteWithChildren
   '/register': typeof RegisterRoute
+  '/vendor': typeof VendorRouteWithChildren
+  '/official/dashboard': typeof OfficialDashboardRoute
+  '/official/history': typeof OfficialHistoryRoute
+  '/official/new-analysis': typeof OfficialNewAnalysisRoute
+  '/official/reports': typeof OfficialReportsRoute
+  '/official/settings': typeof OfficialSettingsRoute
+  '/official/submissions': typeof OfficialSubmissionsRoute
+  '/official/tenders': typeof OfficialTendersRoute
   '/official/login': typeof OfficialLoginRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/documents': typeof VendorDocumentsRoute
+  '/vendor/profile': typeof VendorProfileRoute
+  '/vendor/reports': typeof VendorReportsRoute
+  '/vendor/settings': typeof VendorSettingsRoute
+  '/vendor/submissions': typeof VendorSubmissionsRoute
+  '/vendor/tenders': typeof VendorTendersRoute
+  '/official/analysis/$id': typeof OfficialAnalysisIdRoute
+  '/vendor/submissions/$id': typeof VendorSubmissionsIdRoute
+  '/vendor/submit/$id': typeof VendorSubmitIdRoute
+  '/vendor/tenders/$id': typeof VendorTendersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,8 +208,28 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/official': typeof OfficialRouteWithChildren
   '/register': typeof RegisterRoute
+  '/vendor': typeof VendorRouteWithChildren
+  '/official/dashboard': typeof OfficialDashboardRoute
+  '/official/history': typeof OfficialHistoryRoute
+  '/official/new-analysis': typeof OfficialNewAnalysisRoute
+  '/official/reports': typeof OfficialReportsRoute
+  '/official/settings': typeof OfficialSettingsRoute
+  '/official/submissions': typeof OfficialSubmissionsRoute
+  '/official/tenders': typeof OfficialTendersRoute
   '/official/login': typeof OfficialLoginRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/documents': typeof VendorDocumentsRoute
+  '/vendor/profile': typeof VendorProfileRoute
+  '/vendor/reports': typeof VendorReportsRoute
+  '/vendor/settings': typeof VendorSettingsRoute
+  '/vendor/submissions': typeof VendorSubmissionsRoute
+  '/vendor/tenders': typeof VendorTendersRoute
+  '/official/analysis/$id': typeof OfficialAnalysisIdRoute
+  '/vendor/submissions/$id': typeof VendorSubmissionsIdRoute
+  '/vendor/submit/$id': typeof VendorSubmitIdRoute
+  '/vendor/tenders/$id': typeof VendorTendersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +238,28 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/official': typeof OfficialRouteWithChildren
   '/register': typeof RegisterRoute
+  '/vendor': typeof VendorRouteWithChildren
+  '/official/dashboard': typeof OfficialDashboardRoute
+  '/official/history': typeof OfficialHistoryRoute
+  '/official/new-analysis': typeof OfficialNewAnalysisRoute
+  '/official/reports': typeof OfficialReportsRoute
+  '/official/settings': typeof OfficialSettingsRoute
+  '/official/submissions': typeof OfficialSubmissionsRoute
+  '/official/tenders': typeof OfficialTendersRoute
   '/official_/login': typeof OfficialLoginRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/documents': typeof VendorDocumentsRoute
+  '/vendor/profile': typeof VendorProfileRoute
+  '/vendor/reports': typeof VendorReportsRoute
+  '/vendor/settings': typeof VendorSettingsRoute
+  '/vendor/submissions': typeof VendorSubmissionsRoute
+  '/vendor/tenders': typeof VendorTendersRoute
+  '/official/analysis_/$id': typeof OfficialAnalysisIdRoute
+  '/vendor/submissions_/$id': typeof VendorSubmissionsIdRoute
+  '/vendor/submit_/$id': typeof VendorSubmitIdRoute
+  '/vendor/tenders_/$id': typeof VendorTendersIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -89,8 +269,28 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/how-it-works'
     | '/login'
+    | '/official'
     | '/register'
+    | '/vendor'
+    | '/official/dashboard'
+    | '/official/history'
+    | '/official/new-analysis'
+    | '/official/reports'
+    | '/official/settings'
+    | '/official/submissions'
+    | '/official/tenders'
     | '/official/login'
+    | '/vendor/dashboard'
+    | '/vendor/documents'
+    | '/vendor/profile'
+    | '/vendor/reports'
+    | '/vendor/settings'
+    | '/vendor/submissions'
+    | '/vendor/tenders'
+    | '/official/analysis/$id'
+    | '/vendor/submissions/$id'
+    | '/vendor/submit/$id'
+    | '/vendor/tenders/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -98,8 +298,28 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/how-it-works'
     | '/login'
+    | '/official'
     | '/register'
+    | '/vendor'
+    | '/official/dashboard'
+    | '/official/history'
+    | '/official/new-analysis'
+    | '/official/reports'
+    | '/official/settings'
+    | '/official/submissions'
+    | '/official/tenders'
     | '/official/login'
+    | '/vendor/dashboard'
+    | '/vendor/documents'
+    | '/vendor/profile'
+    | '/vendor/reports'
+    | '/vendor/settings'
+    | '/vendor/submissions'
+    | '/vendor/tenders'
+    | '/official/analysis/$id'
+    | '/vendor/submissions/$id'
+    | '/vendor/submit/$id'
+    | '/vendor/tenders/$id'
   id:
     | '__root__'
     | '/'
@@ -107,8 +327,28 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/how-it-works'
     | '/login'
+    | '/official'
     | '/register'
+    | '/vendor'
+    | '/official/dashboard'
+    | '/official/history'
+    | '/official/new-analysis'
+    | '/official/reports'
+    | '/official/settings'
+    | '/official/submissions'
+    | '/official/tenders'
     | '/official_/login'
+    | '/vendor/dashboard'
+    | '/vendor/documents'
+    | '/vendor/profile'
+    | '/vendor/reports'
+    | '/vendor/settings'
+    | '/vendor/submissions'
+    | '/vendor/tenders'
+    | '/official/analysis_/$id'
+    | '/vendor/submissions_/$id'
+    | '/vendor/submit_/$id'
+    | '/vendor/tenders_/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,7 +357,9 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
+  OfficialRoute: typeof OfficialRouteWithChildren
   RegisterRoute: typeof RegisterRoute
+  VendorRoute: typeof VendorRouteWithChildren
   OfficialLoginRoute: typeof OfficialLoginRoute
 }
 
@@ -158,12 +400,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/official': {
+      id: '/official'
+      path: '/official'
+      fullPath: '/official'
+      preLoaderRoute: typeof OfficialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/vendor': {
+      id: '/vendor'
+      path: '/vendor'
+      fullPath: '/vendor'
+      preLoaderRoute: typeof VendorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/official/dashboard': {
+      id: '/official/dashboard'
+      path: '/dashboard'
+      fullPath: '/official/dashboard'
+      preLoaderRoute: typeof OfficialDashboardRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/official/history': {
+      id: '/official/history'
+      path: '/history'
+      fullPath: '/official/history'
+      preLoaderRoute: typeof OfficialHistoryRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/official/new-analysis': {
+      id: '/official/new-analysis'
+      path: '/new-analysis'
+      fullPath: '/official/new-analysis'
+      preLoaderRoute: typeof OfficialNewAnalysisRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/official/reports': {
+      id: '/official/reports'
+      path: '/reports'
+      fullPath: '/official/reports'
+      preLoaderRoute: typeof OfficialReportsRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/official/settings': {
+      id: '/official/settings'
+      path: '/settings'
+      fullPath: '/official/settings'
+      preLoaderRoute: typeof OfficialSettingsRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/official/submissions': {
+      id: '/official/submissions'
+      path: '/submissions'
+      fullPath: '/official/submissions'
+      preLoaderRoute: typeof OfficialSubmissionsRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/official/tenders': {
+      id: '/official/tenders'
+      path: '/tenders'
+      fullPath: '/official/tenders'
+      preLoaderRoute: typeof OfficialTendersRouteImport
+      parentRoute: typeof OfficialRoute
     }
     '/official_/login': {
       id: '/official_/login'
@@ -172,8 +477,140 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficialLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vendor/dashboard': {
+      id: '/vendor/dashboard'
+      path: '/dashboard'
+      fullPath: '/vendor/dashboard'
+      preLoaderRoute: typeof VendorDashboardRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/documents': {
+      id: '/vendor/documents'
+      path: '/documents'
+      fullPath: '/vendor/documents'
+      preLoaderRoute: typeof VendorDocumentsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/profile': {
+      id: '/vendor/profile'
+      path: '/profile'
+      fullPath: '/vendor/profile'
+      preLoaderRoute: typeof VendorProfileRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/reports': {
+      id: '/vendor/reports'
+      path: '/reports'
+      fullPath: '/vendor/reports'
+      preLoaderRoute: typeof VendorReportsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/settings': {
+      id: '/vendor/settings'
+      path: '/settings'
+      fullPath: '/vendor/settings'
+      preLoaderRoute: typeof VendorSettingsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/submissions': {
+      id: '/vendor/submissions'
+      path: '/submissions'
+      fullPath: '/vendor/submissions'
+      preLoaderRoute: typeof VendorSubmissionsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/tenders': {
+      id: '/vendor/tenders'
+      path: '/tenders'
+      fullPath: '/vendor/tenders'
+      preLoaderRoute: typeof VendorTendersRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/official/analysis_/$id': {
+      id: '/official/analysis_/$id'
+      path: '/analysis/$id'
+      fullPath: '/official/analysis/$id'
+      preLoaderRoute: typeof OfficialAnalysisIdRouteImport
+      parentRoute: typeof OfficialRoute
+    }
+    '/vendor/submissions_/$id': {
+      id: '/vendor/submissions_/$id'
+      path: '/submissions/$id'
+      fullPath: '/vendor/submissions/$id'
+      preLoaderRoute: typeof VendorSubmissionsIdRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/submit_/$id': {
+      id: '/vendor/submit_/$id'
+      path: '/submit/$id'
+      fullPath: '/vendor/submit/$id'
+      preLoaderRoute: typeof VendorSubmitIdRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/tenders_/$id': {
+      id: '/vendor/tenders_/$id'
+      path: '/tenders/$id'
+      fullPath: '/vendor/tenders/$id'
+      preLoaderRoute: typeof VendorTendersIdRouteImport
+      parentRoute: typeof VendorRoute
+    }
   }
 }
+
+interface OfficialRouteChildren {
+  OfficialDashboardRoute: typeof OfficialDashboardRoute
+  OfficialHistoryRoute: typeof OfficialHistoryRoute
+  OfficialNewAnalysisRoute: typeof OfficialNewAnalysisRoute
+  OfficialReportsRoute: typeof OfficialReportsRoute
+  OfficialSettingsRoute: typeof OfficialSettingsRoute
+  OfficialSubmissionsRoute: typeof OfficialSubmissionsRoute
+  OfficialTendersRoute: typeof OfficialTendersRoute
+  OfficialAnalysisIdRoute: typeof OfficialAnalysisIdRoute
+}
+
+const OfficialRouteChildren: OfficialRouteChildren = {
+  OfficialDashboardRoute: OfficialDashboardRoute,
+  OfficialHistoryRoute: OfficialHistoryRoute,
+  OfficialNewAnalysisRoute: OfficialNewAnalysisRoute,
+  OfficialReportsRoute: OfficialReportsRoute,
+  OfficialSettingsRoute: OfficialSettingsRoute,
+  OfficialSubmissionsRoute: OfficialSubmissionsRoute,
+  OfficialTendersRoute: OfficialTendersRoute,
+  OfficialAnalysisIdRoute: OfficialAnalysisIdRoute,
+}
+
+const OfficialRouteWithChildren = OfficialRoute._addFileChildren(
+  OfficialRouteChildren,
+)
+
+interface VendorRouteChildren {
+  VendorDashboardRoute: typeof VendorDashboardRoute
+  VendorDocumentsRoute: typeof VendorDocumentsRoute
+  VendorProfileRoute: typeof VendorProfileRoute
+  VendorReportsRoute: typeof VendorReportsRoute
+  VendorSettingsRoute: typeof VendorSettingsRoute
+  VendorSubmissionsRoute: typeof VendorSubmissionsRoute
+  VendorTendersRoute: typeof VendorTendersRoute
+  VendorSubmissionsIdRoute: typeof VendorSubmissionsIdRoute
+  VendorSubmitIdRoute: typeof VendorSubmitIdRoute
+  VendorTendersIdRoute: typeof VendorTendersIdRoute
+}
+
+const VendorRouteChildren: VendorRouteChildren = {
+  VendorDashboardRoute: VendorDashboardRoute,
+  VendorDocumentsRoute: VendorDocumentsRoute,
+  VendorProfileRoute: VendorProfileRoute,
+  VendorReportsRoute: VendorReportsRoute,
+  VendorSettingsRoute: VendorSettingsRoute,
+  VendorSubmissionsRoute: VendorSubmissionsRoute,
+  VendorTendersRoute: VendorTendersRoute,
+  VendorSubmissionsIdRoute: VendorSubmissionsIdRoute,
+  VendorSubmitIdRoute: VendorSubmitIdRoute,
+  VendorTendersIdRoute: VendorTendersIdRoute,
+}
+
+const VendorRouteWithChildren =
+  VendorRoute._addFileChildren(VendorRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -181,7 +618,9 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
+  OfficialRoute: OfficialRouteWithChildren,
   RegisterRoute: RegisterRoute,
+  VendorRoute: VendorRouteWithChildren,
   OfficialLoginRoute: OfficialLoginRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,6 +1,11 @@
 # SAVE TEST
 from io import BytesIO
 
+import cv2
+import numpy as np
+from pathlib import Path
+import sys
+
 import pymupdf
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,10 +16,70 @@ from document_processor import extract_pdf_bytes
 from compliance_engine import run_compliance_checks
 from report_generator import create_pdf_report
 
+# Load the image-forensics modules from src/lib
+LIB_PATH = Path(__file__).resolve().parent / "src" / "lib"
+sys.path.insert(0, str(LIB_PATH))
 
-app = FastAPI(title="BidBlitz API")
+from image_forensics.watermark import analyze_watermark
 
-# Local development only: allow the Vite frontend to connect.
+
+WATERMARK_REFERENCE_PATH = (
+    Path(__file__).resolve().parent
+    / "src" / "lib" / "test_images"
+    / "watermark_reference.png"
+)
+
+
+def check_pdf_watermark(pdf_bytes):
+    """Compare every PDF page against the fixed reference watermark."""
+    if not WATERMARK_REFERENCE_PATH.exists():
+        raise RuntimeError(
+            f"Watermark reference not found: {WATERMARK_REFERENCE_PATH}"
+        )
+
+    reference = cv2.imread(str(WATERMARK_REFERENCE_PATH))
+    if reference is None:
+        raise RuntimeError("Could not load the watermark reference image.")
+
+    results = []
+
+    with pymupdf.open(stream=pdf_bytes, filetype="pdf") as pdf:
+        for page_number, page in enumerate(pdf, start=1):
+            pix = page.get_pixmap(dpi=150, alpha=False)
+
+            image = np.frombuffer(
+                pix.samples, dtype=np.uint8
+            ).reshape(pix.height, pix.width, pix.n)
+
+            page_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            check = analyze_watermark(page_image, reference)
+
+            status_map = {
+                "ok": "MATCHED",
+                "review": "REVIEW",
+                "low_quality": "REVIEW",
+                "not_checked": "REVIEW",
+            }
+
+            results.append({
+                "page": page_number,
+                "status": status_map.get(check["status"], "REVIEW"),
+                "evidence": (
+                    f"Matching features: {check['inliers']}"
+                    if check.get("inliers") is not None
+                    else "No matching score available."
+                ),
+                "reason": check["explanation"],
+                "region": check.get("region"),
+            })
+
+    return results
+
+
+
+app = FastAPI(title="TenderLens Compliance API")
+
+# Allow local dev and the deployed Lovable frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -22,9 +87,11 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:8080",
         "http://127.0.0.1:8080",
+        "https://tender-sage-lens.lovable.app",
+        "https://*.lovable.app",
     ],
-    allow_credentials=False,
-    allow_methods=["GET", "POST"],
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -107,19 +174,35 @@ async def analyze(
                 "It may be scanned and require OCR."
             )
 
-        # This assumes your existing function accepts three arguments.
+        
         vendor_results = run_compliance_checks(
-            tender_pages,
-            vendor_pages,
-            vendor.filename
+            tender_pages, vendor_pages, vendor.filename
         )
-
         all_results.extend(vendor_results)
+
+        watermark_pages = check_pdf_watermark(vendor_bytes)
+
+        for item in watermark_pages:
+            all_results.append({
+                "vendor": vendor.filename,
+                "requirement": "Watermark consistency",
+                "status": item["status"],
+                "evidence": item["evidence"],
+                "reason": (
+                    f"Page {item['page']}: {item['reason']} "
+                    "Reference matching is a screening aid, not proof of authenticity."
+                ),
+                "page": item["page"],
+                "region": item["region"],
+            })
 
     return {
         "tender_name": tender.filename,
         "results": all_results
     }
+
+
+@app.post("/api/report")
 
 
 @app.post("/api/report")
