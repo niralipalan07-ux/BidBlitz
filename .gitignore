@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Secret API keys & environment
 .env
 .env.*
@@ -44,3 +45,6 @@ Thumbs.db
 
 # Project specific
 certs/
+=======
+certs/
+>>>>>>> 315f7ae (BidBlitz Project)

@@ -1,0 +1,25 @@
+cd /Users/spandy/BidBlitz
+
+source .venv/bin/activate
+
+python -m uvicorn api:app \
+  --host 127.0.0.1 \
+  --port 8443 \
+  --ssl-certfile certs/server.crt \
+  --ssl-keyfile certs/server.key \
+  --ssl-ca-certs certs/ca.crt \
+  --ssl-cert-reqs 2
+
+
+  2. 
+cd /Users/spandy/BidBlitz
+
+curl --cacert certs/ca.crt \
+  --cert certs/client.crt \
+  --key certs/client.key \
+  https://127.0.0.1:8443/api/health
+
+
+3. 
+curl --cacert certs/ca.crt \
+  https://127.0.0.1:8443/api/health
